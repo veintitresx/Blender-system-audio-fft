@@ -1,0 +1,354 @@
+BLENDER DRIVER EXPRESSIONS REFERENCE - UPDATED
+==============================================
+
+NEW PRE-CALCULATED PROPERTIES
+==============================
+
+Instrument Presets (ready to use):
+bpy.context.scene.get("kick_drum", 0)
+bpy.context.scene.get("snare_drum", 0)
+bpy.context.scene.get("hi_hat", 0)
+bpy.context.scene.get("bass_line", 0)
+bpy.context.scene.get("vocal_range", 0)
+
+Overall Metrics:
+bpy.context.scene.get("overall_energy", 0)
+bpy.context.scene.get("overall_average", 0)
+
+Frequency Band Groupings:
+bpy.context.scene.get("sub_bass", 0)
+bpy.context.scene.get("bass", 0)
+bpy.context.scene.get("mids", 0)
+bpy.context.scene.get("highs", 0)
+
+Individual Bins (0-15):
+bpy.context.scene.get("fft_bin_0", 0)
+bpy.context.scene.get("fft_bin_1", 0)
+... up to fft_bin_15
+
+BASIC USAGE WITH PRE-CALCULATED PROPERTIES
+===========================================
+
+Simple instrument-driven animations:
+bpy.context.scene.get("kick_drum", 0) * 2
+bpy.context.scene.get("snare_drum", 0) * 3
+bpy.context.scene.get("hi_hat", 0) * 5
+bpy.context.scene.get("bass_line", 0) * 4
+
+Overall energy:
+bpy.context.scene.get("overall_average", 0) * 10
+bpy.context.scene.get("overall_energy", 0) * 2
+
+Frequency bands:
+bpy.context.scene.get("sub_bass", 0) * 5
+bpy.context.scene.get("bass", 0) * 3
+bpy.context.scene.get("mids", 0) * 2
+bpy.context.scene.get("highs", 0) * 4
+
+MATHEMATICAL OPERATIONS
+=======================
+
+Multiplication/Scaling:
+bpy.context.scene.get("kick_drum", 0) * 5
+bpy.context.scene.get("snare_drum", 0) * 10
+bpy.context.scene.get("overall_average", 0) * 20
+
+Addition with offset:
+bpy.context.scene.get("kick_drum", 0) + 1
+bpy.context.scene.get("bass_line", 0) * 2 + 0.5
+
+Power/Exponential (for smoothing):
+bpy.context.scene.get("kick_drum", 0) ** 2
+bpy.context.scene.get("snare_drum", 0) ** 0.5
+pow(bpy.context.scene.get("hi_hat", 0), 0.3)
+
+Division (for gentle response):
+bpy.context.scene.get("overall_energy", 0) / 2
+
+COMBINING PROPERTIES
+====================
+
+Kick + Snare combo:
+bpy.context.scene.get("kick_drum", 0) + bpy.context.scene.get("snare_drum", 0)
+
+Bass + Mid balance:
+bpy.context.scene.get("bass", 0) - bpy.context.scene.get("mids", 0)
+
+Weighted combination:
+(bpy.context.scene.get("kick_drum", 0) * 0.7) + (bpy.context.scene.get("bass_line", 0) * 0.3)
+
+Low vs High contrast:
+bpy.context.scene.get("sub_bass", 0) - bpy.context.scene.get("highs", 0)
+
+Maximum of multiple instruments:
+max(bpy.context.scene.get("kick_drum", 0), bpy.context.scene.get("snare_drum", 0))
+
+CONDITIONAL EXPRESSIONS
+=======================
+
+Threshold trigger (only activate above level):
+bpy.context.scene.get("kick_drum", 0) if bpy.context.scene.get("kick_drum", 0) > 0.5 else 0
+
+Multi-level response:
+2 if bpy.context.scene.get("snare_drum", 0) > 1.5 else (1 if bpy.context.scene.get("snare_drum", 0) > 0.5 else 0)
+
+Beat detection (spike):
+1 if bpy.context.scene.get("kick_drum", 0) > bpy.context.scene.get("overall_average", 0) * 2 else 0
+
+Combined conditions:
+bpy.context.scene.get("kick_drum", 0) if (bpy.context.scene.get("kick_drum", 0) > 0.3 and bpy.context.scene.get("snare_drum", 0) < 0.5) else 0
+
+TRIGONOMETRIC FUNCTIONS
+========================
+
+Sine wave modulation:
+sin(bpy.context.scene.get("overall_average", 0) * 6.28)
+cos(bpy.context.scene.get("bass", 0) * 3.14)
+
+Oscillating with audio:
+sin(frame * 0.1) * bpy.context.scene.get("kick_drum", 0)
+
+Rotating based on audio:
+bpy.context.scene.get("hi_hat", 0) * 12.56
+
+Phase-shifted animation:
+sin(bpy.context.scene.get("bass", 0) * 6.28 + frame * 0.05)
+
+SMOOTHING AND RESPONSE CURVES
+==============================
+
+Gentle response (square root):
+sqrt(bpy.context.scene.get("kick_drum", 0))
+
+Sharp response (squared):
+bpy.context.scene.get("snare_drum", 0) ** 2
+
+Logarithmic (compress dynamic range):
+log(bpy.context.scene.get("overall_energy", 0) + 1)
+
+Exponential (expand dynamic range):
+exp(bpy.context.scene.get("bass", 0)) - 1
+
+CLAMPING AND RANGE MAPPING
+===========================
+
+Clamp to maximum:
+min(bpy.context.scene.get("kick_drum", 0) * 5, 3.0)
+
+Clamp to minimum:
+max(bpy.context.scene.get("bass_line", 0) * 2, 0.5)
+
+Map 0-1 to -1 to 1:
+(bpy.context.scene.get("overall_average", 0) * 2) - 1
+
+Map 0-1 to 5-15:
+(bpy.context.scene.get("mids", 0) * 10) + 5
+
+Full clamp to range:
+max(0, min(5, bpy.context.scene.get("overall_energy", 0)))
+
+FRAME-BASED ANIMATIONS
+======================
+
+Current frame:
+frame
+
+Time-based (24fps):
+frame / 24
+
+Oscillating with audio modulation:
+sin(frame * 0.1) * bpy.context.scene.get("overall_average", 0) * 5
+
+Audio-controlled speed:
+sin(frame * bpy.context.scene.get("kick_drum", 0) * 0.5)
+
+Beat-synced rotation:
+frame * bpy.context.scene.get("overall_average", 0)
+
+PRACTICAL EXAMPLES BY PROPERTY
+===============================
+
+LOCATION (Position)
+-------------------
+X axis - kick driven:
+bpy.context.scene.get("kick_drum", 0) * 2
+
+Y axis - snare driven:
+bpy.context.scene.get("snare_drum", 0) * 3
+
+Z axis - overall energy:
+bpy.context.scene.get("overall_average", 0) * 5
+
+Z axis - bass driven:
+bpy.context.scene.get("bass", 0) * 4
+
+ROTATION (Radians)
+------------------
+X rotation - kick:
+bpy.context.scene.get("kick_drum", 0) * 3.14159
+
+Y rotation - overall:
+bpy.context.scene.get("overall_average", 0) * 6.28
+
+Z rotation - hi-hat:
+bpy.context.scene.get("hi_hat", 0) * 12.56
+
+Z rotation - continuous with audio modulation:
+frame * 0.1 * bpy.context.scene.get("overall_average", 0)
+
+SCALE (Uniform and Non-uniform)
+--------------------------------
+Uniform scale - kick pulse:
+bpy.context.scene.get("kick_drum", 0) * 2 + 1
+
+Uniform scale - overall energy:
+bpy.context.scene.get("overall_average", 0) * 3 + 0.5
+
+X scale - bass:
+bpy.context.scene.get("bass", 0) + 1
+
+Y scale - mids:
+bpy.context.scene.get("mids", 0) + 1
+
+Z scale - highs:
+bpy.context.scene.get("highs", 0) * 2 + 1
+
+MATERIAL PROPERTIES
+===================
+
+Emission strength - overall energy:
+bpy.context.scene.get("overall_average", 0) * 20
+
+Emission strength - kick:
+bpy.context.scene.get("kick_drum", 0) * 15
+
+Color mix factor - bass:
+bpy.context.scene.get("bass", 0)
+
+Metallic - mids:
+bpy.context.scene.get("mids", 0)
+
+Roughness - inverted highs:
+1 - bpy.context.scene.get("highs", 0)
+
+Transparency - overall:
+1 - bpy.context.scene.get("overall_average", 0)
+
+GEOMETRY NODES
+==============
+
+Instance scale - kick:
+bpy.context.scene.get("kick_drum", 0) * 3 + 0.1
+
+Displacement strength - bass:
+bpy.context.scene.get("bass", 0) * 2
+
+Noise scale - overall:
+bpy.context.scene.get("overall_average", 0) * 20 + 1
+
+Subdivision level (integer) - snare:
+int(bpy.context.scene.get("snare_drum", 0) * 3 + 1)
+
+Array count - overall energy:
+int(bpy.context.scene.get("overall_energy", 0) * 5 + 3)
+
+Point density - mids:
+bpy.context.scene.get("mids", 0) * 100 + 10
+
+ADVANCED EXPRESSIONS
+====================
+
+Kick-driven scale with minimum size:
+max(1, bpy.context.scene.get("kick_drum", 0) * 5 + 1)
+
+Snare trigger (only on strong hits):
+1 if bpy.context.scene.get("snare_drum", 0) > 1.0 else 0
+
+Bass-driven with smooth attack:
+sqrt(bpy.context.scene.get("bass", 0)) * 3
+
+Hi-hat with exponential response:
+bpy.context.scene.get("hi_hat", 0) ** 2 * 10
+
+Overall energy with compression:
+bpy.context.scene.get("overall_energy", 0) / (bpy.context.scene.get("overall_energy", 0) + 1)
+
+Dynamic range expander:
+bpy.context.scene.get("overall_average", 0) ** 1.5
+
+Beat-reactive oscillation:
+sin(frame * bpy.context.scene.get("kick_drum", 0)) * bpy.context.scene.get("overall_average", 0)
+
+Low-end emphasis (boost bass, reduce highs):
+(bpy.context.scene.get("bass", 0) * 2) - (bpy.context.scene.get("highs", 0) * 0.5)
+
+COMMON USE CASES
+================
+
+Kick drum pulsing scale:
+bpy.context.scene.get("kick_drum", 0) * 3 + 1
+
+Snare-triggered flash:
+bpy.context.scene.get("snare_drum", 0) * 20
+
+Hi-hat shimmer:
+bpy.context.scene.get("hi_hat", 0) * 5
+
+Bass wobble (position):
+sin(frame * 0.1) * bpy.context.scene.get("bass_line", 0) * 2
+
+Vocal-driven glow:
+bpy.context.scene.get("vocal_range", 0) * 15
+
+Overall energy particle emission:
+bpy.context.scene.get("overall_average", 0) * 100
+
+Frequency band color mixing:
+R: bpy.context.scene.get("bass", 0)
+G: bpy.context.scene.get("mids", 0)
+B: bpy.context.scene.get("highs", 0)
+
+PROPERTY REFERENCE GUIDE
+=========================
+
+Individual Bins (fft_bin_0 to fft_bin_15):
+fft_bin_0: Sub Bass (20-60Hz) - Deep kick
+fft_bin_1: Bass (60-250Hz) - Kick/Bass
+fft_bin_2: Low Mid (250-500Hz) - Bass/Guitar
+fft_bin_3: Mid (500-2kHz) - Vocals
+fft_bin_4: High Mid (2-4kHz) - Clarity
+fft_bin_5: Presence (4-6kHz) - Intelligibility
+fft_bin_6: Brilliance (6-20kHz) - Cymbals
+fft_bin_7-15: Extended highs
+
+Pre-calculated Instruments:
+kick_drum: bins 0+1 (typically 0-2 range)
+snare_drum: bins 4+5+6 (typically 0-3 range)
+hi_hat: bins 6+7 (typically 0-2 range)
+bass_line: bins 1+2 (typically 0-2 range)
+vocal_range: bins 3+4 (typically 0-2 range)
+
+Overall Metrics:
+overall_energy: sum of all bins (0-16 range)
+overall_average: average of all bins (0-1 range)
+
+Frequency Bands:
+sub_bass: bin 0 only (0-1 range)
+bass: average bins 1+2 (0-1 range)
+mids: average bins 3+4+5 (0-1 range)
+highs: average bins 6+ (0-1 range)
+
+TIPS
+====
+
+- Pre-calculated properties are cleaner and easier to read
+- Use kick_drum for impactful movements (scales, jumps)
+- Use snare_drum for accents and highlights
+- Use hi_hat for rapid, subtle movements
+- Use overall_average for smooth, general responsiveness
+- Use overall_energy when you need a wider numeric range
+- Frequency bands (bass, mids, highs) are great for color mixing
+- Combine properties for complex behaviors
+- Add offsets (+1) to avoid zero values in scale
+- Use conditionals for threshold/trigger effects
+- Test with known audio (pure kick/snare tracks) first
