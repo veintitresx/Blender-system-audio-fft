@@ -1,6 +1,6 @@
 bl_info = {
     "name": "System Audio FFT - User Friendly",
-    "author": "Claude (user-friendly)",
+    "author": "veintitresx with Claude.ai (user-friendly)",
     "version": (0, 7),
     "blender": (4, 0, 0),
     "category": "Node",
